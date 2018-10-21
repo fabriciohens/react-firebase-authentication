@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import * as routes from './constants/routes';
 
 const INITIAL_STATE = {
@@ -23,8 +23,14 @@ class SignUpForm extends React.Component {
     auth
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        this.setState({ ...INITIAL_STATE });
-        history.push(routes.HOME);
+        // Create user in own app Firebase database too
+        db
+          .doCreateUser(authUser.user.uid, username, email)
+          .then(() => {
+            this.setState({ ...INITIAL_STATE });
+            history.push(routes.HOME);
+          })
+          .catch(error => { this.setState({ error }); });
       })
       .catch(error => { this.setState({ error }); });
     event.preventDefault();

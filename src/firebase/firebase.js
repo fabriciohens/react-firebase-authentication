@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 const prodConfig = {
   apiKey: 'AIzaSyBarTM0M2PxijZBCu4RnyvSrmiTM7JQSPI',
@@ -26,7 +27,6 @@ if (!firebase.apps.length) {
 }
 
 const auth = firebase.auth();
+const db = firebase.database();
 
-export {
-  auth
-};
+export { auth, db };
